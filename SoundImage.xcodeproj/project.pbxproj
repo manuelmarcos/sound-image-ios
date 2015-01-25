@@ -83,6 +83,8 @@
 		991BE82D91D1D08E6C0230AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9F701D111A72D6BF004D11B9 /* AVFoundation.framework */,
+				9F701D0F1A72D247004D11B9 /* MobileCoreServices.framework */,
 				AE76E52E293FA02D65984742 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -91,8 +93,6 @@
 		9F701CDD1A72D03B004D11B9 = {
 			isa = PBXGroup;
 			children = (
-				9F701D111A72D6BF004D11B9 /* AVFoundation.framework */,
-				9F701D0F1A72D247004D11B9 /* MobileCoreServices.framework */,
 				9F701CE81A72D03B004D11B9 /* SoundImage */,
 				9F701D021A72D03B004D11B9 /* SoundImageTests */,
 				9F701CE71A72D03B004D11B9 /* Products */,
