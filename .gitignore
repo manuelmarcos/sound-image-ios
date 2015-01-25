@@ -16,6 +16,9 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
 SoundImage.xcworkspace/xcuserdata/manuelmarcosregalado.xcuserdatad/UserInterfaceState.xcuserstate
 
 # CocoaPods
