@@ -18,6 +18,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *recordPauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *stopButton;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (nonatomic) IBOutlet UIView *overlayView;
+@property (nonatomic) UIImagePickerController *imagePickerController;
+@property (nonatomic) NSMutableArray *capturedImages;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
 
 @end
 
@@ -27,6 +31,8 @@
 {
     [super viewDidLoad];
     
+    self.capturedImages = [[NSMutableArray alloc] init];
+
     // Disable Stop/Play button when application launches
     [_stopButton setEnabled:NO];
     [_playButton setEnabled:NO];
@@ -71,14 +77,6 @@
 
 - (IBAction)recordPauseTapped:(id)sender
 {
-    
-    // Show the camera
-    UIImagePickerController *camera = [UIImagePickerController new];
-    camera.delegate = self;
-    camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-    camera.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
-    [self presentViewController:camera animated:YES completion:nil];
-    
     // Stop the audio player before recording
     if (player.playing) {
         [player stop];
@@ -119,6 +117,39 @@
     }
 }
 
+- (IBAction)takeAPicButtonTapped:(id)sender
+{
+    
+    // Show the camera
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    //    imagePickerController.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
+    
+    imagePickerController.delegate = self;
+    
+    if (imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
+    {
+        /*
+         The user wants to use the camera interface. Set up our custom overlay view for the camera.
+         */
+        imagePickerController.showsCameraControls = NO;
+        
+        /*
+         Load the overlay view from the OverlayView nib file. Self is the File's Owner for the nib file, so the overlayView outlet is set to the main view in the nib. Pass that view to the image picker controller to use as its overlay view, and set self's reference to the view to nil.
+         */
+        [[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil];
+        self.overlayView.frame = imagePickerController.cameraOverlayView.frame;
+        imagePickerController.cameraOverlayView = self.overlayView;
+        self.overlayView = nil;
+    }
+    
+    
+    self.imagePickerController = imagePickerController;
+    [self presentViewController:self.imagePickerController animated:YES completion:nil];
+
+}
+
 #pragma mark - AVAudioRecorderDelegate
 
 - (void) audioRecorderDidFinishRecording:(AVAudioRecorder *)avrecorder successfully:(BOOL)flag{
@@ -137,5 +168,64 @@
                                           otherButtonTitles:nil];
     [alert show];
 }
+
+
+
+- (void)finishAndUpdate
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    
+    if ([self.capturedImages count] > 0)
+    {
+        if ([self.capturedImages count] == 1)
+        {
+            // Camera took a single picture.
+            [self.imageView setImage:[self.capturedImages objectAtIndex:0]];
+        }
+        else
+        {
+            // Camera took multiple pictures; use the list of images for animation.
+            self.imageView.animationImages = self.capturedImages;
+            self.imageView.animationDuration = 5.0;    // Show each captured photo for 5 seconds.
+            self.imageView.animationRepeatCount = 0;   // Animate forever (show all photos).
+            [self.imageView startAnimating];
+        }
+        
+        // To be ready to start again, clear the captured images array.
+        [self.capturedImages removeAllObjects];
+    }
+    
+    self.imagePickerController = nil;
+
+}
+
+- (IBAction)done:(id)sender
+{
+    [self finishAndUpdate];
+    
+}
+
+
+- (IBAction)takePhoto:(id)sender
+{
+    [self.imagePickerController takePicture];
+}
+
+
+#pragma mark - UIImagePickerControllerDelegate
+
+// This method is called when an image has been chosen from the library or taken from the camera.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    [self.capturedImages addObject:image];
+    
+    [self finishAndUpdate];
+}
+
+
+
+
 
 @end

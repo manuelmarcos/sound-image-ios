@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		41BA17745728EBD9A943CC2B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE76E52E293FA02D65984742 /* libPods.a */; };
+		9F34CAC71A75827200C82BBF /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F34CAC61A75827200C82BBF /* OverlayView.xib */; };
 		9F701CEC1A72D03B004D11B9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F701CEB1A72D03B004D11B9 /* main.m */; };
 		9F701CEF1A72D03B004D11B9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F701CEE1A72D03B004D11B9 /* AppDelegate.m */; };
 		9F701CF21A72D03B004D11B9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F701CF11A72D03B004D11B9 /* ViewController.m */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		29D5DFD98ED0CD865A4D7CAE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9F34CAC61A75827200C82BBF /* OverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OverlayView.xib; sourceTree = "<group>"; };
 		9F701CE61A72D03B004D11B9 /* SoundImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F701CEA1A72D03B004D11B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F701CEB1A72D03B004D11B9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				9F701CF61A72D03B004D11B9 /* Images.xcassets */,
 				9F701CF81A72D03B004D11B9 /* LaunchScreen.xib */,
 				9F701CE91A72D03B004D11B9 /* Supporting Files */,
+				9F34CAC61A75827200C82BBF /* OverlayView.xib */,
 			);
 			path = SoundImage;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F701CF51A72D03B004D11B9 /* Main.storyboard in Resources */,
+				9F34CAC71A75827200C82BBF /* OverlayView.xib in Resources */,
 				9F701CFA1A72D03B004D11B9 /* LaunchScreen.xib in Resources */,
 				9F701CF71A72D03B004D11B9 /* Images.xcassets in Resources */,
 			);
