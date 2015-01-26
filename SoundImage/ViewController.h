@@ -11,9 +11,4 @@
 
 @interface ViewController : UIViewController <AVAudioRecorderDelegate, AVAudioPlayerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-- (IBAction)recordPauseTapped:(id)sender;
-- (IBAction)stopTapped:(id)sender;
-- (IBAction)playTapped:(id)sender;
-- (IBAction)takePhoto:(id)sender;
-
 @end

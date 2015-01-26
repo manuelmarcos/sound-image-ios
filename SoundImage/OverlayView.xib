@@ -23,20 +23,9 @@
                         <action selector="takePhoto:" destination="-1" eventType="touchUpInside" id="oQR-fv-qAI"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="anq-Ag-cNA">
-                    <rect key="frame" x="549" y="562" width="43" height="30"/>
-                    <state key="normal" title="DONE">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="done:" destination="-1" eventType="touchUpInside" id="pKp-hx-HSz"/>
-                    </connections>
-                </button>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="anq-Ag-cNA" secondAttribute="bottom" constant="8" id="CEx-xh-3ak"/>
                 <constraint firstAttribute="centerX" secondItem="2gg-H9-1d9" secondAttribute="centerX" id="X9m-wI-zac"/>
-                <constraint firstAttribute="trailing" secondItem="anq-Ag-cNA" secondAttribute="trailing" constant="8" id="Yyk-UK-uI0"/>
                 <constraint firstAttribute="bottom" secondItem="2gg-H9-1d9" secondAttribute="bottom" constant="8" id="nQa-o7-wBj"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
