@@ -46,9 +46,7 @@
     // Show the camera
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    //    imagePickerController.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeImage, nil];
-    
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;    
     imagePickerController.delegate = self;
     
     if (imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
