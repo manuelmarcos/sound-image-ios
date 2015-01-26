@@ -8,16 +8,10 @@
 
 #import "ViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "SoundManager.h"
 
 @interface ViewController ()
-{
-    AVAudioRecorder *recorder;
-    AVAudioPlayer *player;
-}
 
-@property (weak, nonatomic) IBOutlet UIButton *recordPauseButton;
-@property (weak, nonatomic) IBOutlet UIButton *stopButton;
-@property (weak, nonatomic) IBOutlet UIButton *playButton;
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) UIImagePickerController *imagePickerController;
 @property (nonatomic) NSMutableArray *capturedImages;
@@ -31,86 +25,24 @@
 {
     [super viewDidLoad];
     
-    self.capturedImages = [[NSMutableArray alloc] init];
-
-    // Disable Stop/Play button when application launches
-    [_stopButton setEnabled:NO];
-    [_playButton setEnabled:NO];
-    
-    // Set the audio file
-    NSArray *pathComponents = [NSArray arrayWithObjects:
-                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"MyAudioMemo.m4a",
-                               nil];
-    NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-    
-    // Setup audio session
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    NSError *setOverrideError;
-    [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&setOverrideError];
-    if(setOverrideError)
-    {
-        NSLog(@"%@", [setOverrideError description]);
-    }
-    // Define the recorder setting
-    NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
-    
-    [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
-    [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
-    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
-    
-    // Initiate and prepare the recorder
-    recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    recorder.delegate = self;
-    recorder.meteringEnabled = YES;
-    [recorder prepareToRecord];
+    _capturedImages = [NSMutableArray new];
 }
 
-- (void)recordSound
+- (void)dealloc
 {
-    // Stop the audio player before recording
-    if (player.playing)
-    {
-        [player stop];
-    }
-    
-    if (!recorder.recording)
-    {
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive:YES error:nil];
-        
-        // Start recording
-        [recorder record];
-        [_recordPauseButton setTitle:@"Pause" forState:UIControlStateNormal];
-        
-    }
-    [_stopButton setEnabled:YES];
-    [_playButton setEnabled:NO];
+    _overlayView           = nil;
+    _imageView             = nil;
+    _capturedImages        = nil;
+    _imagePickerController = nil;
 }
 
-- (void)stopRecord
-{
-    [recorder stop];
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    [audioSession setActive:NO error:nil];
-}
-
-- (void)playSound
-{
-    if (!recorder.recording)
-    {
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
-        [player setVolume: 1.0];
-        [player setNumberOfLoops:-1];
-        [player setDelegate:self];
-        [player play];
-    }
-}
+#pragma mark - Actions
 
 - (IBAction)photoButtonTapped:(id)sender
 {
-    [self recordSound];
+    // Start recording
+    [[SoundManager sharedInstance] recordSound];
+    
     // Show the camera
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -134,36 +66,31 @@
         imagePickerController.cameraOverlayView = _overlayView;
         _overlayView = nil;
     }
-    
-    
     _imagePickerController = imagePickerController;
     [self presentViewController:_imagePickerController animated:YES completion:nil];
-
 }
 
-#pragma mark - AVAudioRecorderDelegate
-
-- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)avrecorder successfully:(BOOL)flag{
-    [_recordPauseButton setTitle:@"Record" forState:UIControlStateNormal];
-    [_stopButton setEnabled:NO];
-    [_playButton setEnabled:YES];
+- (IBAction)takePhoto:(id)sender
+{
+    [_imagePickerController takePicture];
 }
 
-#pragma mark - AVAudioPlayerDelegate
+#pragma mark - UIImagePickerControllerDelegate
 
-- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Done"
-                                                    message: @"Finish playing the recording!"
-                                                   delegate: nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
+// This method is called when an image has been chosen from the library or taken from the camera.
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    [_capturedImages addObject:image];
+    
+    [self finishAndUpdate];
 }
 
 - (void)finishAndUpdate
 {
-    [self stopRecord];
-    [self playSound];
+    [[SoundManager sharedInstance] stopRecord];
+    [[SoundManager sharedInstance] playSound];
     
     // TODO: We also stop the recording and play de recording in a loop
     [self dismissViewControllerAnimated:YES completion:NULL];
@@ -188,24 +115,6 @@
         [_capturedImages removeAllObjects];
     }
     _imagePickerController = nil;
-}
-
-- (IBAction)takePhoto:(id)sender
-{
-    [_imagePickerController takePicture];
-}
-
-
-#pragma mark - UIImagePickerControllerDelegate
-
-// This method is called when an image has been chosen from the library or taken from the camera.
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    
-    [_capturedImages addObject:image];
-    
-    [self finishAndUpdate];
 }
 
 @end
