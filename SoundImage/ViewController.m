@@ -9,15 +9,17 @@
 #import "ViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SoundManager.h"
+#import "RowCollectionViewCell.h"
 
 @interface ViewController ()
 
 @property (nonatomic) IBOutlet UIView *overlayView;
-@property (nonatomic) UIImagePickerController *imagePickerController;
-@property (nonatomic) NSMutableArray *capturedImages;
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
-
+@property (nonatomic) NSArray        *images;
+@property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) UIImagePickerController *imagePickerController;
 @end
+
+static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
 
 @implementation ViewController
 
@@ -25,46 +27,68 @@
 {
     [super viewDidLoad];
     
-    _capturedImages = [NSMutableArray new];
-}
+    [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(RowCollectionViewCell.class) bundle:nil] forCellWithReuseIdentifier:kCellReuseIdentifier];
 
-- (void)dealloc
-{
-    _overlayView           = nil;
-    _imageView             = nil;
-    _capturedImages        = nil;
-    _imagePickerController = nil;
-}
-
-#pragma mark - Actions
-
-- (IBAction)photoButtonTapped:(id)sender
-{
-    // Start recording
-    [[SoundManager sharedInstance] recordSound];
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
+    CGSize newItemSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width + 80);
+    flowLayout.itemSize = newItemSize;
     
     // Show the camera
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;    
-    imagePickerController.delegate = self;
+    _imagePickerController= [[UIImagePickerController alloc] init];
+    _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    _imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    _imagePickerController.delegate = self;
     
-    if (imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
+    if (_imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
     {
         /*
          The user wants to use the camera interface. Set up our custom overlay view for the camera.
          */
-        imagePickerController.showsCameraControls = NO;
+        _imagePickerController.showsCameraControls = NO;
         
         /*
          Load the overlay view from the OverlayView nib file. Self is the File's Owner for the nib file, so the overlayView outlet is set to the main view in the nib. Pass that view to the image picker controller to use as its overlay view, and set self's reference to the view to nil.
          */
         [[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil];
-        _overlayView.frame = imagePickerController.cameraOverlayView.frame;
-        imagePickerController.cameraOverlayView = _overlayView;
+        _overlayView.frame = _imagePickerController.cameraOverlayView.frame;
+        _imagePickerController.cameraOverlayView = _overlayView;
         _overlayView = nil;
     }
-    _imagePickerController = imagePickerController;
+    
+    
+    _images         = @[@"test",@"test",@"test",@"test",@"test",@"test"];
+}
+
+- (void)dealloc
+{
+    // TODO:
+    _overlayView           = nil;
+    _images        = nil;
+    _imagePickerController = nil;
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _images.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    RowCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellReuseIdentifier forIndexPath:indexPath];
+    cell.imageView.image = [UIImage imageNamed:_images[indexPath.item]];
+    cell.titleImage.text    = @"YEAH";
+    return cell;
+}
+
+#pragma mark - Actions
+
+- (IBAction)photoButtonTapped:(id)sender
+{    
+    // Start recording
+    [[SoundManager sharedInstance] recordSound];
+    
     [self presentViewController:_imagePickerController animated:YES completion:nil];
 }
 
@@ -78,41 +102,14 @@
 // This method is called when an image has been chosen from the library or taken from the camera.
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    
-    [_capturedImages addObject:image];
-    
-    [self finishAndUpdate];
+    [self finishAndUpdateWithImage:[info valueForKey:UIImagePickerControllerOriginalImage]];
 }
 
-- (void)finishAndUpdate
+- (void)finishAndUpdateWithImage:(UIImage *)imageTaken
 {
+    // TODO: do something with the image
     [[SoundManager sharedInstance] stopRecord];
     [[SoundManager sharedInstance] playSound];
-    
-    // TODO: We also stop the recording and play de recording in a loop
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    
-    if ([_capturedImages count] > 0)
-    {
-        if ([_capturedImages count] == 1)
-        {
-            // Camera took a single picture.
-            [_imageView setImage:[_capturedImages objectAtIndex:0]];
-        }
-        else
-        {
-            // Camera took multiple pictures; use the list of images for animation.
-            _imageView.animationImages = _capturedImages;
-            _imageView.animationDuration = 5.0;    // Show each captured photo for 5 seconds.
-            _imageView.animationRepeatCount = 0;   // Animate forever (show all photos).
-            [_imageView startAnimating];
-        }
-        
-        // To be ready to start again, clear the captured images array.
-        [_capturedImages removeAllObjects];
-    }
-    _imagePickerController = nil;
 }
 
 @end

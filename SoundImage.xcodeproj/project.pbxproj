@@ -19,6 +19,8 @@
 		9F701D061A72D03B004D11B9 /* SoundImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F701D051A72D03B004D11B9 /* SoundImageTests.m */; };
 		9F701D101A72D247004D11B9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F701D0F1A72D247004D11B9 /* MobileCoreServices.framework */; };
 		9F701D121A72D6BF004D11B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F701D111A72D6BF004D11B9 /* AVFoundation.framework */; };
+		9F9656B71A7E5A5F0067B734 /* RowCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9656B61A7E5A5F0067B734 /* RowCollectionViewCell.m */; };
+		9F9656B91A7E5A840067B734 /* RowCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,9 @@
 		9F701D051A72D03B004D11B9 /* SoundImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundImageTests.m; sourceTree = "<group>"; };
 		9F701D0F1A72D247004D11B9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9F701D111A72D6BF004D11B9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9F9656B51A7E5A5F0067B734 /* RowCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowCollectionViewCell.h; sourceTree = "<group>"; };
+		9F9656B61A7E5A5F0067B734 /* RowCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowCollectionViewCell.m; sourceTree = "<group>"; };
+		9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RowCollectionViewCell.xib; sourceTree = "<group>"; };
 		AE76E52E293FA02D65984742 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698A21CF1437D63991D68DD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				9F126C6C1A76F3BD003D8897 /* Sound Manager */,
+				9F9656BA1A7E5DC90067B734 /* Components */,
 				9F701CED1A72D03B004D11B9 /* AppDelegate.h */,
 				9F701CEE1A72D03B004D11B9 /* AppDelegate.m */,
 				9F701CF01A72D03B004D11B9 /* ViewController.h */,
@@ -165,6 +171,16 @@
 				9F701D041A72D03B004D11B9 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9F9656BA1A7E5DC90067B734 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				9F9656B51A7E5A5F0067B734 /* RowCollectionViewCell.h */,
+				9F9656B61A7E5A5F0067B734 /* RowCollectionViewCell.m */,
+				9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F9656B91A7E5A840067B734 /* RowCollectionViewCell.xib in Resources */,
 				9F701CF51A72D03B004D11B9 /* Main.storyboard in Resources */,
 				9F34CAC71A75827200C82BBF /* OverlayView.xib in Resources */,
 				9F701CFA1A72D03B004D11B9 /* LaunchScreen.xib in Resources */,
@@ -307,6 +324,7 @@
 				9F126C6F1A76F3DF003D8897 /* SoundManager.m in Sources */,
 				9F701CEF1A72D03B004D11B9 /* AppDelegate.m in Sources */,
 				9F701CEC1A72D03B004D11B9 /* main.m in Sources */,
+				9F9656B71A7E5A5F0067B734 /* RowCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
