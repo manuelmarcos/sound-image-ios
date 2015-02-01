@@ -14,9 +14,10 @@
 @interface ViewController ()
 
 @property (nonatomic) IBOutlet UIView *overlayView;
+@property (nonatomic) UIImagePickerController *imagePickerController;
 @property (nonatomic) NSArray        *images;
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) UIImagePickerController *imagePickerController;
+
 @end
 
 static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
@@ -32,30 +33,7 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
     CGSize newItemSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width + 80);
     flowLayout.itemSize = newItemSize;
-    
-    // Show the camera
-    _imagePickerController= [[UIImagePickerController alloc] init];
-    _imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    _imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    _imagePickerController.delegate = self;
-    
-    if (_imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
-    {
-        /*
-         The user wants to use the camera interface. Set up our custom overlay view for the camera.
-         */
-        _imagePickerController.showsCameraControls = NO;
-        
-        /*
-         Load the overlay view from the OverlayView nib file. Self is the File's Owner for the nib file, so the overlayView outlet is set to the main view in the nib. Pass that view to the image picker controller to use as its overlay view, and set self's reference to the view to nil.
-         */
-        [[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil];
-        _overlayView.frame = _imagePickerController.cameraOverlayView.frame;
-        _imagePickerController.cameraOverlayView = _overlayView;
-        _overlayView = nil;
-    }
-    
-    
+
     _images         = @[@"test",@"test",@"test",@"test",@"test",@"test"];
 }
 
@@ -85,10 +63,36 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
 #pragma mark - Actions
 
 - (IBAction)photoButtonTapped:(id)sender
-{    
+{
+    // Set Up the collection view
+    [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(RowCollectionViewCell.class) bundle:nil] forCellWithReuseIdentifier:kCellReuseIdentifier];
+
+    
     // Start recording
     [[SoundManager sharedInstance] recordSound];
     
+    // Show the camera
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;    
+    imagePickerController.delegate = self;
+    
+    if (imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
+    {
+        /*
+         The user wants to use the camera interface. Set up our custom overlay view for the camera.
+         */
+        imagePickerController.showsCameraControls = NO;
+        
+        /*
+         Load the overlay view from the OverlayView nib file. Self is the File's Owner for the nib file, so the overlayView outlet is set to the main view in the nib. Pass that view to the image picker controller to use as its overlay view, and set self's reference to the view to nil.
+         */
+        [[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil];
+        _overlayView.frame = imagePickerController.cameraOverlayView.frame;
+        imagePickerController.cameraOverlayView = _overlayView;
+        _overlayView = nil;
+    }
+    _imagePickerController = imagePickerController;
     [self presentViewController:_imagePickerController animated:YES completion:nil];
 }
 
@@ -110,6 +114,7 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
     // TODO: do something with the image
     [[SoundManager sharedInstance] stopRecord];
     [[SoundManager sharedInstance] playSound];
+    _imagePickerController = nil;
 }
 
 @end

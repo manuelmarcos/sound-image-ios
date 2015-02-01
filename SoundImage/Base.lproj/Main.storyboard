@@ -42,9 +42,9 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="bex-m0-EaN"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yja-rb-Qf5">
-                                <rect key="frame" x="184" y="686" width="46" height="30"/>
-                                <state key="normal" title="Button">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yja-rb-Qf5">
+                                <rect key="frame" x="136" y="630" width="143" height="86"/>
+                                <state key="normal" image="fingerprint">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -73,4 +73,7 @@
             <point key="canvasLocation" x="237" y="291"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="fingerprint" width="143" height="86"/>
+    </resources>
 </document>
