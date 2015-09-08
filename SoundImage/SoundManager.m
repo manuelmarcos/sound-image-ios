@@ -81,9 +81,34 @@
 
 - (void)playSound
 {
+    // Stop the audio player
+    [self stopSound];
+    
+    // Play the sound
     if (!recorder.recording)
     {
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+        [player setVolume: 1.0];
+        [player setNumberOfLoops:-1];
+        [player setDelegate:self];
+        [player play];
+    }
+}
+
+- (void)stopSound
+{
+    // Stop the audio player
+    if (player.playing)
+    {
+        [player stop];
+    }
+}
+
+- (void)playSoundWithContentsOfURL:(NSURL *)contentsOfURL
+{
+    if (!recorder.recording)
+    {
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:contentsOfURL error:nil];
         [player setVolume: 1.0];
         [player setNumberOfLoops:-1];
         [player setDelegate:self];

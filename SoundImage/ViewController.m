@@ -9,14 +9,17 @@
 #import "ViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SoundManager.h"
+#import "SoundImage.h"
 #import "RowCollectionViewCell.h"
 
 @interface ViewController ()
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) UIImagePickerController *imagePickerController;
-@property (nonatomic) NSArray        *images;
+@property (nonatomic) NSArray        *soundImageObjects;
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, assign) CGFloat lastContentOffset;
+@property (nonatomic, assign) CGFloat currentIndex;
 
 @end
 
@@ -34,14 +37,28 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
     CGSize newItemSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.width + 80);
     flowLayout.itemSize = newItemSize;
 
-    _images         = @[@"test",@"test",@"test",@"test",@"test",@"test"];
+    
+    SoundImage *soundsImageObject = [SoundImage new];
+    soundsImageObject.imageName = @"drummer";
+    soundsImageObject.fileToBePlayedURL =[[NSURL alloc] initWithString:[[NSBundle mainBundle] pathForResource:@"drumBeat" ofType:@"wav"]];
+    soundsImageObject.titleImage = @"hola";
+    soundsImageObject.muted = NO;
+    
+    
+    SoundImage *soundsImageObject2 = [SoundImage new];
+    soundsImageObject2.imageName = @"drummer";
+    soundsImageObject2.fileToBePlayedURL =[[NSURL alloc] initWithString:[[NSBundle mainBundle] pathForResource:@"drumBeat" ofType:@"wav"]];
+    soundsImageObject2.titleImage = @"hola";
+    soundsImageObject2.muted = YES;
+    
+    _soundImageObjects         = @[soundsImageObject,soundsImageObject2,soundsImageObject,soundsImageObject2,soundsImageObject];
 }
 
 - (void)dealloc
 {
     // TODO:
     _overlayView           = nil;
-    _images        = nil;
+    _soundImageObjects     = nil;
     _imagePickerController = nil;
 }
 
@@ -49,15 +66,70 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _images.count;
+    return _soundImageObjects.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     RowCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellReuseIdentifier forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:_images[indexPath.item]];
-    cell.titleImage.text    = @"YEAH";
+    cell.delegate = self;
+    
+    SoundImage *rowSoundImage = (SoundImage *)_soundImageObjects[indexPath.item];
+    cell.imageView.image = [UIImage imageNamed:rowSoundImage.imageName];
+    cell.titleImage.text    = rowSoundImage.titleImage;
+    cell.outputFileSoundURL = rowSoundImage.fileToBePlayedURL;
+    UIImage *muteButtonImage = nil;
+    if ([rowSoundImage isMuted] == YES)
+    {
+        muteButtonImage = [UIImage imageNamed:@"mute"];
+    }
+    else
+    {
+        muteButtonImage = [UIImage imageNamed:@"unmuted"];
+    }
+    [cell.muteButton setImage:muteButtonImage forState:UIControlStateNormal];
+
     return cell;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
+    CGPoint queryPoint = CGPointZero;
+    for (UICollectionViewCell *cell in [_collectionView visibleCells])
+    {
+        // Determine the direction of the scrollview
+        if (self.lastContentOffset > scrollView.contentOffset.y)
+        {
+           queryPoint  = CGPointMake(0, flowLayout.itemSize.height);
+        }
+        else if (self.lastContentOffset < scrollView.contentOffset.y)
+        {
+            CGFloat queryXOffet  = (flowLayout.itemSize.width / 2);
+            CGFloat queryYOffet = (self.view.frame.size.height - (flowLayout.itemSize.height - 80));
+            queryPoint = CGPointMake(queryXOffet, queryYOffet);
+        }
+        
+        CGPoint convertedPoint = [_collectionView convertPoint:queryPoint fromView:_collectionView.superview];
+        NSIndexPath *topVisibleCellIndexPath = [_collectionView indexPathForItemAtPoint:convertedPoint];
+        if (topVisibleCellIndexPath.item != _currentIndex && topVisibleCellIndexPath != nil)
+        {
+            _currentIndex = topVisibleCellIndexPath.item;
+            RowCollectionViewCell *currentCollectionViewCell = (RowCollectionViewCell *)cell;
+            
+            SoundImage *soundsImageObject = (SoundImage *)_soundImageObjects[topVisibleCellIndexPath.item];
+            if ([soundsImageObject isMuted] == YES)
+            {
+                [[SoundManager sharedInstance] stopSound];
+            }
+            else
+            {
+                RowCollectionViewCell *currentCollectionViewCell = (RowCollectionViewCell *)cell;
+                [[SoundManager sharedInstance] playSoundWithContentsOfURL:currentCollectionViewCell.outputFileSoundURL];
+            }
+        }
+        self.lastContentOffset = scrollView.contentOffset.y;
+    }
 }
 
 #pragma mark - Actions
@@ -74,8 +146,9 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
     // Show the camera
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;    
     imagePickerController.delegate = self;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+
     
     if (imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera)
     {
@@ -101,6 +174,25 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
     [_imagePickerController takePicture];
 }
 
+#pragma mark - RowCollectionViewCellDelegate
+
+- (void)rowCollectionViewCellMuteButtonTapped:(RowCollectionViewCell *)rowCollectionViewCell
+{
+    NSIndexPath *indexPath = [_collectionView indexPathForCell:rowCollectionViewCell];
+    SoundImage *soundImage = (SoundImage *)_soundImageObjects[indexPath.item];
+    if ([soundImage isMuted] == YES)
+    {
+        [[SoundManager sharedInstance] playSoundWithContentsOfURL:rowCollectionViewCell.outputFileSoundURL];
+        soundImage.muted = NO;
+    }
+    else
+    {
+        [[SoundManager sharedInstance] stopSound];
+        soundImage.muted = YES;
+    }
+    [_collectionView reloadData];
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 // This method is called when an image has been chosen from the library or taken from the camera.
@@ -113,7 +205,8 @@ static NSString *kCellReuseIdentifier = @"uk.co.ribot.RowCollectionViewCell";
 {
     // TODO: do something with the image
     [[SoundManager sharedInstance] stopRecord];
-    [[SoundManager sharedInstance] playSound];
+    //[[SoundManager sharedInstance] playSound];
+    [_imagePickerController dismissViewControllerAnimated:YES completion:nil];
     _imagePickerController = nil;
 }
 

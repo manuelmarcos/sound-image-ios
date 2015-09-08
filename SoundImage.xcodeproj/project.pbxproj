@@ -21,6 +21,8 @@
 		9F701D121A72D6BF004D11B9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F701D111A72D6BF004D11B9 /* AVFoundation.framework */; };
 		9F9656B71A7E5A5F0067B734 /* RowCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9656B61A7E5A5F0067B734 /* RowCollectionViewCell.m */; };
 		9F9656B91A7E5A840067B734 /* RowCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */; };
+		9F9656BE1A7E95AF0067B734 /* drumBeat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9F9656BD1A7E95AF0067B734 /* drumBeat.wav */; };
+		9F9656C11A7EB7B10067B734 /* SoundImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9656C01A7EB7B10067B734 /* SoundImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,9 @@
 		9F9656B51A7E5A5F0067B734 /* RowCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowCollectionViewCell.h; sourceTree = "<group>"; };
 		9F9656B61A7E5A5F0067B734 /* RowCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowCollectionViewCell.m; sourceTree = "<group>"; };
 		9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RowCollectionViewCell.xib; sourceTree = "<group>"; };
+		9F9656BD1A7E95AF0067B734 /* drumBeat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = drumBeat.wav; sourceTree = "<group>"; };
+		9F9656BF1A7EB7B10067B734 /* SoundImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundImage.h; sourceTree = "<group>"; };
+		9F9656C01A7EB7B10067B734 /* SoundImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundImage.m; sourceTree = "<group>"; };
 		AE76E52E293FA02D65984742 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698A21CF1437D63991D68DD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +137,7 @@
 		9F701CE81A72D03B004D11B9 /* SoundImage */ = {
 			isa = PBXGroup;
 			children = (
+				9F9656C21A7EB7ED0067B734 /* Model */,
 				9F126C6C1A76F3BD003D8897 /* Sound Manager */,
 				9F9656BA1A7E5DC90067B734 /* Components */,
 				9F701CED1A72D03B004D11B9 /* AppDelegate.h */,
@@ -140,6 +146,7 @@
 				9F701CF11A72D03B004D11B9 /* ViewController.m */,
 				9F701CF31A72D03B004D11B9 /* Main.storyboard */,
 				9F701CF61A72D03B004D11B9 /* Images.xcassets */,
+				9F9656BD1A7E95AF0067B734 /* drumBeat.wav */,
 				9F701CF81A72D03B004D11B9 /* LaunchScreen.xib */,
 				9F701CE91A72D03B004D11B9 /* Supporting Files */,
 				9F34CAC61A75827200C82BBF /* OverlayView.xib */,
@@ -181,6 +188,15 @@
 				9F9656B81A7E5A840067B734 /* RowCollectionViewCell.xib */,
 			);
 			name = Components;
+			sourceTree = "<group>";
+		};
+		9F9656C21A7EB7ED0067B734 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9F9656BF1A7EB7B10067B734 /* SoundImage.h */,
+				9F9656C01A7EB7B10067B734 /* SoundImage.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,6 +283,7 @@
 			files = (
 				9F9656B91A7E5A840067B734 /* RowCollectionViewCell.xib in Resources */,
 				9F701CF51A72D03B004D11B9 /* Main.storyboard in Resources */,
+				9F9656BE1A7E95AF0067B734 /* drumBeat.wav in Resources */,
 				9F34CAC71A75827200C82BBF /* OverlayView.xib in Resources */,
 				9F701CFA1A72D03B004D11B9 /* LaunchScreen.xib in Resources */,
 				9F701CF71A72D03B004D11B9 /* Images.xcassets in Resources */,
@@ -325,6 +342,7 @@
 				9F701CEF1A72D03B004D11B9 /* AppDelegate.m in Sources */,
 				9F701CEC1A72D03B004D11B9 /* main.m in Sources */,
 				9F9656B71A7E5A5F0067B734 /* RowCollectionViewCell.m in Sources */,
+				9F9656C11A7EB7B10067B734 /* SoundImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

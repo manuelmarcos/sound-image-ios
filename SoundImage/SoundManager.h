@@ -14,6 +14,8 @@
 - (void)recordSound;
 - (void)stopRecord;
 - (void)playSound;
+- (void)stopSound;
+- (void)playSoundWithContentsOfURL:(NSURL *)contentsOfURL;
 
 + (SoundManager *)sharedInstance;
 

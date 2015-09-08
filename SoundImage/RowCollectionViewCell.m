@@ -10,4 +10,22 @@
 
 @implementation RowCollectionViewCell
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        [self  addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(soundImagePressed)]];
+
+    }
+    return self;
+}
+- (void)soundImagePressed
+{
+    if ([_delegate respondsToSelector:@selector(rowCollectionViewCellMuteButtonTapped:)])
+    {
+        [_delegate rowCollectionViewCellMuteButtonTapped:self];
+    }
+}
+
 @end

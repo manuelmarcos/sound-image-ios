@@ -23,9 +23,21 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lmT-2l-ifX">
+                    <rect key="frame" x="272" y="8" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="18i-XW-KX2"/>
+                        <constraint firstAttribute="height" constant="40" id="kS9-5l-9S1"/>
+                    </constraints>
+                    <state key="normal" image="mute">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <constraints>
+                <constraint firstItem="lmT-2l-ifX" firstAttribute="top" secondItem="ji5-JC-vdY" secondAttribute="top" constant="8" id="3x7-Fh-foN"/>
                 <constraint firstItem="T9E-i7-cKK" firstAttribute="leading" secondItem="ji5-JC-vdY" secondAttribute="leading" id="4Cj-yF-1SK"/>
+                <constraint firstAttribute="trailing" secondItem="lmT-2l-ifX" secondAttribute="trailing" constant="8" id="6Ar-ZP-bpy"/>
                 <constraint firstAttribute="bottom" secondItem="T9E-i7-cKK" secondAttribute="bottom" constant="8" id="GKS-PF-fmt"/>
                 <constraint firstAttribute="trailing" secondItem="T9E-i7-cKK" secondAttribute="trailing" id="IuW-ga-Z4D"/>
                 <constraint firstItem="rKF-K2-x47" firstAttribute="top" secondItem="ji5-JC-vdY" secondAttribute="top" id="Lhg-8E-MhV"/>
@@ -35,9 +47,13 @@
             </constraints>
             <connections>
                 <outlet property="imageView" destination="rKF-K2-x47" id="s5O-49-W46"/>
+                <outlet property="muteButton" destination="lmT-2l-ifX" id="pMC-kT-T29"/>
                 <outlet property="titleImage" destination="T9E-i7-cKK" id="NHi-Uv-KEh"/>
             </connections>
             <point key="canvasLocation" x="235" y="352"/>
         </collectionReusableView>
     </objects>
+    <resources>
+        <image name="mute" width="50" height="50"/>
+    </resources>
 </document>
